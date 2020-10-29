@@ -26,7 +26,8 @@ def create_dataframe(n):
         if title == None: 
             continue
         else :
-            synopsis = soup.find("div", {"class":"content-txt"})
+            section = soup.find("section", {"class": "section ovw ovw-synopsis"})
+            synopsis = section.find("div", {"class":"content-txt"})
             if synopsis==None: 
                 continue
             synopsis = synopsis.text.strip()
