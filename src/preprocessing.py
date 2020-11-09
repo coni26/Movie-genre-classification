@@ -53,10 +53,10 @@ def genres_to_vec(l):
         res[dic_genres[genre]]=1
     return res
 
-def genres_selection(df) :
+def genres_selection(df):
     for i,row in df.iterrows():
         for genre in literal_eval(row['Genre(s)']):
-            if dic_genres[genre]>16 : 
+            if dic_genres[genre]>16: 
                 df.drop(i,inplace=True)
                 break
     return df
