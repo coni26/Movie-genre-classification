@@ -34,23 +34,24 @@ dic_genres = {'Drame': 0,
               'Dessin animé': 33}
 
 #Calcul du nombre de films par genre
-dic_nb_genres = {}
+def histogramme(df):
+  dic_nb_genres = {}
 
-for i, row in df.iterrows():
-    for genre in literal_eval(row['Genre(s)']):
-        if genre in dic_nb_genres:
-            dic_nb_genres[genre] += 1
-        else:
-            dic_nb_genres[genre] = 1
+  for i, row in df.iterrows():
+      for genre in literal_eval(row['Genre(s)']):
+          if genre in dic_nb_genres:
+              dic_nb_genres[genre] += 1
+          else:
+              dic_nb_genres[genre] = 1
 
-#Histogramme du nombre de films par genre
-dic_nb_genres = {k: v for k, v in sorted(dic_nb_genres.items(), key=lambda item: item[1], reverse=False)}
-plt.figure(figsize=(10, 10))
-colors = ['r'] * 17 + ['steelblue'] * 17
-plt.barh(list(dic_nb_genres.keys()), dic_nb_genres.values(), color=colors)
-plt.title('Répartition des films par genre')
-plt.xlabel('Nombre de films')
-plt.show()
+  #Histogramme du nombre de films par genre
+  dic_nb_genres = {k: v for k, v in sorted(dic_nb_genres.items(), key=lambda item: item[1], reverse=False)}
+  plt.figure(figsize=(10, 10))
+  colors = ['r'] * 17 + ['steelblue'] * 17
+  plt.barh(list(dic_nb_genres.keys()), dic_nb_genres.values(), color=colors)
+  plt.title('Répartition des films par genre')
+  plt.xlabel('Nombre de films')
+  plt.show()
 
 #Représentation des liens entre les genres sous forme de réseau
 mat = np.zeros((17,17), dtype=int)
