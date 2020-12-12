@@ -33,6 +33,7 @@ dic_genres = {'Drame': 0,
               'Drama': 32,
               'Dessin animé': 33}
 
+#Calcul du nombre de films par genre
 dic_nb_genres = {}
 
 for i, row in df.iterrows():
@@ -42,6 +43,7 @@ for i, row in df.iterrows():
         else:
             dic_nb_genres[genre] = 1
 
+#Histogramme du nombre de films par genre
 dic_nb_genres = {k: v for k, v in sorted(dic_nb_genres.items(), key=lambda item: item[1], reverse=False)}
 plt.figure(figsize=(10, 10))
 colors = ['r'] * 17 + ['steelblue'] * 17
@@ -50,7 +52,7 @@ plt.title('Répartition des films par genre')
 plt.xlabel('Nombre de films')
 plt.show()
 
-
+#Représentation des liens entre les genres sous forme de réseau
 mat = np.zeros((17,17), dtype=int)
 
 for _, row in df.iterrows():
@@ -104,7 +106,7 @@ labels[16] = 'Guerre'
 nx.draw_networkx_labels(G, pos, labels, font_size=16)
 plt.show()
 
-
+#Nuages de mots par genre
 l_dico = []
 for k in range (17):
     l_dico.append({})
