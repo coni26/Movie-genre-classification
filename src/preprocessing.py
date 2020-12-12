@@ -35,8 +35,7 @@ dic_genres = {'Drame': 0,
               'Drama': 32,
               'Dessin animé': 33}
 
-#Premiers nettoyages
-
+#Premiers nettoyages généraux
 def clean_text(s):
     return s.replace("’"," ").replace("'"," ").replace(".", "").replace(":", "").replace(",","").replace("é","e").replace("è","e").replace("ê","e").replace("à","a").replace("ù","u").replace("û","u").replace("â","a").replace("ç","c").replace("ï","i").replace('…','').replace('(',' ').replace(')',' ').lower().split(" ")
 
@@ -80,4 +79,29 @@ for i, row in df.iterrows():
                     
 french_stopwords += [k for k,v in dic_words.items() if v>4000]
                     
+  
+#Pre-Processing partie Train
+def ban_words(df, limit=10):
+    french_stopwords = list(set(stopwords.words('french')))
+    banned_words = []
+
+    for word in french_stopwords:
+        word = word.replace("é","e").replace("è","e").replace("ê","e").replace("à","a").replace("ù","u").replace("û","u").replace("ç","c").replace("ï","i")
+        banned_words.append(stemmer.stem(word))
+
+    dic = {}
+
+    for i, row in df.iterrows():
+        l = row['Synopsis']
+        for k, word in enumerate(l):
+            if len(word)<=2:
+                continue
+            if not(word in l[:k]):
+                if word in dic:
+                    dic[word]+=1
+                else:
+                    dic[word]=1
+
+    banned_words += [k for k,v in dic.items() if v<=limit]
+    return banned_words
               
