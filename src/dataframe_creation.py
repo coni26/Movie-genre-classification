@@ -5,30 +5,28 @@ import numpy as np
 from IPython.display import clear_output
 import time
 
-#Liste des identifiants dont l'url correpond bien à un film sur Allociné
-#Construction liste
-f = open("liste.txt","a") 
-for i in range(0,10):
-    page = 'https://www.allocine.fr/films/?page='+str(i)
-    resp = requests.get(page).text
-    soup = BeautifulSoup(resp, 'html.parser')
-    for a in soup.find_all('a', href=True):
-        if a['href'][:25]=='/film/fichefilm_gen_cfilm':
-            f.write((a['href'][26:-5]) + "\n")
-f.close()
+def liste_url(nb_pages):
+    '''
+    Liste des identifiants dont l'url correpond bien à un film sur Allociné
+    '''
+    f = open("liste.txt","a") 
+    for i in range(0, nb_pages):
+        page = 'https://www.allocine.fr/films/?page='+str(i)
+        resp = requests.get(page).text
+        soup = BeautifulSoup(resp, 'html.parser')
+        for a in soup.find_all('a', href=True):
+            if a['href'][:25]=='/film/fichefilm_gen_cfilm':
+                f.write((a['href'][26:-5]) + "\n")
+    f.close()
 
-#Utilisation liste
-f= open("liste.txt","r")
-l = f.readlines()
-f.close()
 
-for i in range(len(l)):
-    l[i]=int(l[i][:-1])
-    
-l = sorted(list(set(l)))
-
-#Webscraping
 def create_dataframe(n):
+    f= open("liste.txt","r")
+    l = f.readlines()
+    f.close()
+    for i in range(len(l)):
+        l[i]=int(l[i][:-1])
+    l = sorted(list(set(l)))
     donnees = []
     i = 0
     start = time.time()
