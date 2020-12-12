@@ -33,7 +33,7 @@ dic_genres = {'Drame': 0,
               'Drama': 32,
               'Dessin animé': 33}
 
-#Calcul du nombre de films par genre
+
 def histogramme(df):
   dic_nb_genres = {}
 
@@ -44,7 +44,6 @@ def histogramme(df):
           else:
               dic_nb_genres[genre] = 1
 
-  #Histogramme du nombre de films par genre
   dic_nb_genres = {k: v for k, v in sorted(dic_nb_genres.items(), key=lambda item: item[1], reverse=False)}
   plt.figure(figsize=(10, 10))
   colors = ['r'] * 17 + ['steelblue'] * 17
@@ -53,81 +52,87 @@ def histogramme(df):
   plt.xlabel('Nombre de films')
   plt.show()
 
-#Représentation des liens entre les genres sous forme de réseau
-mat = np.zeros((17,17), dtype=int)
+  
+def reseau_genres(df, dic_genres):
+  '''
+      Représentation des liens entre les genres sous forme de réseau
+  '''
+  mat = np.zeros((17,17), dtype=int)
 
-for _, row in df.iterrows():
-    genres = literal_eval(row['Genre(s)'])
-    for i in range(len(genres)):
-        for j in range(i,len(genres)):
-            x = dic_genres[genres[i]]
-            y = dic_genres[genres[j]]
-            if x>y :
-                x, y = y, x
-            mat[x,y] += 1
-            
-plt.figure(figsize=(15,12))
+  for _, row in df.iterrows():
+      genres = literal_eval(row['Genre(s)'])
+      for i in range(len(genres)):
+          for j in range(i,len(genres)):
+              x = dic_genres[genres[i]]
+              y = dic_genres[genres[j]]
+              if x>y :
+                  x, y = y, x
+              mat[x,y] += 1
 
-G = nx.Graph()
-for i in range(16):
-    for j in range(i+1,17):
-        G.add_edge(i,j,color='r',weight=mat[i,j]/150)
-        
-pos = nx.circular_layout(G)
+  plt.figure(figsize=(15,12))
 
-edges = G.edges() 
-colors = [G[u][v]['color'] for u,v in edges]
-weights = [G[u][v]['weight'] for u,v in edges]
-node_size = [mat[i,i]/1.5 for i in range(17)]
+  G = nx.Graph()
+  for i in range(16):
+      for j in range(i+1,17):
+          G.add_edge(i,j,color='r',weight=mat[i,j]/150)
 
-options = {"alpha": 0.6}
-nx.draw_networkx_nodes(G, pos, node_color="steelblue", node_size=node_size, **options)
+  pos = nx.circular_layout(G)
 
-nx.draw_networkx_edges(G, pos, edge_color=colors, width=weights)
+  edges = G.edges() 
+  colors = [G[u][v]['color'] for u,v in edges]
+  weights = [G[u][v]['weight'] for u,v in edges]
+  node_size = [mat[i,i]/1.5 for i in range(17)]
 
-labels = {}
-labels[0] = 'Drame'
-labels[1] = 'Comédie'
-labels[2] = 'Thriller'
-labels[3] = 'Action'
-labels[4] = 'Romance'
-labels[5] = 'Comédie dramatique'
-labels[6] = 'Documentaire'
-labels[7] = 'Aventure'
-labels[8] = 'Policier'
-labels[9] = 'Epouvante'
-labels[10] = 'Fantastique'
-labels[11] = 'Animation'
-labels[12] = 'Science fiction'
-labels[13] = 'Famille'
-labels[14] = 'Historique'
-labels[15] = 'Biopic'
-labels[16] = 'Guerre'
+  options = {"alpha": 0.6}
+  nx.draw_networkx_nodes(G, pos, node_color="steelblue", node_size=node_size, **options)
 
-nx.draw_networkx_labels(G, pos, labels, font_size=16)
-plt.show()
+  nx.draw_networkx_edges(G, pos, edge_color=colors, width=weights)
 
-#Nuages de mots par genre
-l_dico = []
-for k in range (17):
-    l_dico.append({})
-    
-for i, row in df.iterrows():
-    l = row['Synopsis']
-    lst = []
-    for genre in literal_eval(row['Genre(s)']):
-        if dic_genres[genre]<=16 : 
-            lst.append(dic_genres[genre])
-    for k, word in enumerate(l):
-        if not(len(word)<=2) or (word in french_stopwords) or (word in l[:k]):
-            for p in lst:
-                if word in l_dico[p]:
-                    l_dico[p][word] += 1
-                else:
-                    l_dico[p][word] = 1
+  labels = {}
+  labels[0] = 'Drame'
+  labels[1] = 'Comédie'
+  labels[2] = 'Thriller'
+  labels[3] = 'Action'
+  labels[4] = 'Romance'
+  labels[5] = 'Comédie dramatique'
+  labels[6] = 'Documentaire'
+  labels[7] = 'Aventure'
+  labels[8] = 'Policier'
+  labels[9] = 'Epouvante'
+  labels[10] = 'Fantastique'
+  labels[11] = 'Animation'
+  labels[12] = 'Science fiction'
+  labels[13] = 'Famille'
+  labels[14] = 'Historique'
+  labels[15] = 'Biopic'
+  labels[16] = 'Guerre'
 
+  nx.draw_networkx_labels(G, pos, labels, font_size=16)
+  plt.show()
+
+
+
+def words_genre(df, dic_genres):
+  l_dico = []
+  for k in range (17):
+      l_dico.append({})
+
+  for i, row in df.iterrows():
+      l = row['Synopsis']
+      lst = []
+      for genre in literal_eval(row['Genre(s)']):
+          if dic_genres[genre]<=16 : 
+              lst.append(dic_genres[genre])
+      for k, word in enumerate(l):
+          if not(len(word)<=2) or (word in french_stopwords) or (word in l[:k]):
+              for p in lst:
+                  if word in l_dico[p]:
+                      l_dico[p][word] += 1
+                  else:
+                      l_dico[p][word] = 1
+  return l_dico
                     
-def world_cloud_mask(num_genre, path):
+def world_cloud_mask(l_dico, num_genre, path):
     mask = np.array(Image.open(path))
     genre = [k  for (k, val) in dic_genres.items() if val == num_genre]
     wordcloud = WordCloud(background_color='white', mask = mask,
