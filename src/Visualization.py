@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 dic_genres = {'Drame': 0,
               'Comédie': 1,
               'Thriller': 2,
@@ -39,10 +33,6 @@ dic_genres = {'Drame': 0,
               'Drama': 32,
               'Dessin animé': 33}
 
-
-# In[ ]:
-
-
 dic_nb_genres = {}
 
 for i, row in df.iterrows():
@@ -52,10 +42,6 @@ for i, row in df.iterrows():
         else:
             dic_nb_genres[genre] = 1
 
-
-# In[ ]:
-
-
 dic_nb_genres = {k: v for k, v in sorted(dic_nb_genres.items(), key=lambda item: item[1], reverse=False)}
 plt.figure(figsize=(10, 10))
 colors = ['r'] * 17 + ['steelblue'] * 17
@@ -64,3 +50,56 @@ plt.title('Répartition des films par genre')
 plt.xlabel('Nombre de films')
 plt.show()
 
+
+mat = np.zeros((17,17), dtype=int)
+
+for _, row in df.iterrows():
+    genres = literal_eval(row['Genre(s)'])
+    for i in range(len(genres)):
+        for j in range(i,len(genres)):
+            x = dic_genres[genres[i]]
+            y = dic_genres[genres[j]]
+            if x>y :
+                x, y = y, x
+            mat[x,y] += 1
+            
+plt.figure(figsize=(15,12))
+
+G = nx.Graph()
+for i in range(16):
+    for j in range(i+1,17):
+        G.add_edge(i,j,color='r',weight=mat[i,j]/150)
+        
+pos = nx.circular_layout(G)
+
+edges = G.edges() 
+colors = [G[u][v]['color'] for u,v in edges]
+weights = [G[u][v]['weight'] for u,v in edges]
+node_size = [mat[i,i]/1.5 for i in range(17)]
+
+options = {"alpha": 0.6}
+nx.draw_networkx_nodes(G, pos, node_color="steelblue", node_size=node_size, **options)
+
+nx.draw_networkx_edges(G, pos, edge_color=colors, width=weights)
+
+labels = {}
+labels[0] = 'Drame'
+labels[1] = 'Comédie'
+labels[2] = 'Thriller'
+labels[3] = 'Action'
+labels[4] = 'Romance'
+labels[5] = 'Comédie dramatique'
+labels[6] = 'Documentaire'
+labels[7] = 'Aventure'
+labels[8] = 'Policier'
+labels[9] = 'Epouvante'
+labels[10] = 'Fantastique'
+labels[11] = 'Animation'
+labels[12] = 'Science fiction'
+labels[13] = 'Famille'
+labels[14] = 'Historique'
+labels[15] = 'Biopic'
+labels[16] = 'Guerre'
+
+nx.draw_networkx_labels(G, pos, labels, font_size=16)
+plt.show()
