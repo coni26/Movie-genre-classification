@@ -1,17 +1,5 @@
 import pandas as pd
 
-
-
-def clean_text(s):
-    return s.replace("’"," ").replace("'"," ").replace(".", "").replace(":", "").replace(",","").replace("é","e").replace("è","e").replace("ê","e").replace("à","a").replace("ù","u").replace("û","u").replace("â","a").replace("ç","c").replace("ï","i").replace('…','').replace('(',' ').replace(')',' ').lower().split(" ")
-
-def stem_list(l):
-    res = []
-    for word in l:
-        res.append(stemmer.stem(word))
-    return res
-
-
 dic_genres = {'Drame': 0,
               'Comédie': 1,
               'Thriller': 2,
@@ -47,12 +35,25 @@ dic_genres = {'Drame': 0,
               'Drama': 32,
               'Dessin animé': 33}
 
+#Premiers nettoyages
+
+def clean_text(s):
+    return s.replace("’"," ").replace("'"," ").replace(".", "").replace(":", "").replace(",","").replace("é","e").replace("è","e").replace("ê","e").replace("à","a").replace("ù","u").replace("û","u").replace("â","a").replace("ç","c").replace("ï","i").replace('…','').replace('(',' ').replace(')',' ').lower().split(" ")
+
+def stem_list(l):
+    res = []
+    for word in l:
+        res.append(stemmer.stem(word))
+    return res
+
+#Conversion des genres en vecteurs binaires
 def genres_to_vec(l):
     res = [0]*len(dic_genres)
     for genre in literal_eval(l):
         res[dic_genres[genre]]=1
     return res
 
+#Sélection des genres suffisamment représentés
 def genres_selection(df):
     for i,row in df.iterrows():
         for genre in literal_eval(row['Genre(s)']):
@@ -60,3 +61,23 @@ def genres_selection(df):
                 df.drop(i,inplace=True)
                 break
     return df
+
+#Suppression de mots Stopwords ou trop récurents
+french_stopwords = list(set(stopwords.words('french')))
+
+for i in range(len(french_stopwords)):
+    french_stopwords[i] = french_stopwords[i].replace("é","e").replace('é','e').replace("è","e").replace("ê","e").replace("à","a").replace("ù","u").replace("û","u").replace("ü","u").replace("ï",'i').replace("â","a").replace("ç","c").replace("ï","i").replace("î","i")
+
+dic_words = {}
+for i, row in df.iterrows():
+    for word in row['Synopsis']:
+        if len(word)>2:
+            if not(word in french_stopwords):
+                if word in dic_words:
+                    dic_words[word]+=1
+                else:
+                    dic_words[word]=1
+                    
+french_stopwords += [k for k,v in dic_words.items() if v>4000]
+                    
+              
