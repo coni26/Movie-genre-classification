@@ -103,3 +103,37 @@ labels[16] = 'Guerre'
 
 nx.draw_networkx_labels(G, pos, labels, font_size=16)
 plt.show()
+
+
+l_dico = []
+for k in range (17):
+    l_dico.append({})
+    
+for i, row in df.iterrows():
+    l = row['Synopsis']
+    lst = []
+    for genre in literal_eval(row['Genre(s)']):
+        if dic_genres[genre]<=16 : 
+            lst.append(dic_genres[genre])
+    for k, word in enumerate(l):
+        if not(len(word)<=2) or (word in french_stopwords) or (word in l[:k]):
+            for p in lst:
+                if word in l_dico[p]:
+                    l_dico[p][word] += 1
+                else:
+                    l_dico[p][word] = 1
+
+                    
+def world_cloud_mask(num_genre, path):
+    mask = np.array(Image.open(path))
+    genre = [k  for (k, val) in dic_genres.items() if val == num_genre]
+    wordcloud = WordCloud(background_color='white', mask = mask,
+                          width=mask.shape[1],
+                          height=mask.shape[0]
+                          ).generate_from_frequencies(l_dico[num_genre])
+
+    plt.figure(figsize=(15,15))
+    plt.imshow(wordcloud, interpolation="bilinear")
+    plt.title('Nuage de mots pour le genre '+'"'+genre[0]+'"', fontsize=20)
+    plt.axis('off')
+    plt.show()
