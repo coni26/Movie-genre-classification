@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
 
 def precision(y_pred, y):
     res = 0
@@ -36,15 +31,6 @@ def F1_score(y_pred, y):
     rec = recall(y_pred, y)
     prec = precision(y_pred, y)
     return 2*(rec*prec)/(rec+prec)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
