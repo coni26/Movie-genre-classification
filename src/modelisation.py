@@ -1,10 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 def compute_hash(word):
+    '''Donne un identifiant numérique à chaque mot'''
     res=0
     for i, letter in enumerate(word):
         res+=7**(len(word)-i)*(ord(letter)-97)
@@ -111,16 +106,3 @@ def y_mat(df):
     for i, row in df.iterrows():
         y[i,:] = row['Genre(s)']
     return y
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
