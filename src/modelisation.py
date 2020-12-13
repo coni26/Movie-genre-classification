@@ -1,11 +1,16 @@
 def compute_hash(word):
-    '''Donne un identifiant numérique à chaque mot'''
+    '''
+        Donne un identifiant numérique à chaque mot
+    '''
     res=0
     for i, letter in enumerate(word):
         res+=7**(len(word)-i)*(ord(letter)-97)
     return res%4096
 
 def create_hash(df):
+    '''
+        Identifie numériquement chaque mot s'il n'est pas dans 'ban_words'
+    '''
     l_hash = [None]*4096
     index = 0
     l_words = []
