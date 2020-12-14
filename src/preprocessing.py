@@ -46,14 +46,16 @@ def stem_list(l):
         res.append(stemmer.stem(word))
     return res
 
-#Conversion des genres en vecteurs binaires
+
 def genres_to_vec(l):
+  '''
+    Conversion des genres en dummy vecteur
+  '''
     res = [0]*len(dic_genres)
     for genre in literal_eval(l):
         res[dic_genres[genre]]=1
     return res
 
-#Sélection des genres suffisamment représentés
 def genres_selection(df):
     for i,row in df.iterrows():
         for genre in literal_eval(row['Genre(s)']):
