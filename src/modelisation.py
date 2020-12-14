@@ -119,9 +119,10 @@ models = [SVC(kernel='sigmoid',max_iter=100, random_state=0),
 
 name_models = ['SVC', 'Logistic Regression', 'Random Forest']
 
-columns = list(dic_genres.keys())[:17] + ['Mean']
+
 
 def compare_models(models):
+    columns = list(dic_genres.keys())[:17] + ['Mean']
     res = np.zeros((len(models), 18))
     for j, clf in enumerate(models):
       l_res = []
