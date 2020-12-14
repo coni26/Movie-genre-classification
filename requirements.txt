@@ -1,4 +1,13 @@
 numpy
 pandas
+math
 matplotlib
 sklearn
+networkx
+bs4
+time
+nltk
+wordcloud
+ast
+PIL
+IPython.display
