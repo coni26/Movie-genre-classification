@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 dic_genres = {'Drame': 0,
               'Comédie': 1,
@@ -61,27 +62,10 @@ def genres_selection(df):
                 break
     return df
 
-#Suppression de mots Stopwords ou trop récurents
-french_stopwords = list(set(stopwords.words('french')))
-
-for i in range(len(french_stopwords)):
-    french_stopwords[i] = french_stopwords[i].replace("é","e").replace('é','e').replace("è","e").replace("ê","e").replace("à","a").replace("ù","u").replace("û","u").replace("ü","u").replace("ï",'i').replace("â","a").replace("ç","c").replace("ï","i").replace("î","i")
-
-dic_words = {}
-for i, row in df.iterrows():
-    for word in row['Synopsis']:
-        if len(word)>2:
-            if not(word in french_stopwords):
-                if word in dic_words:
-                    dic_words[word]+=1
-                else:
-                    dic_words[word]=1
-                    
-french_stopwords += [k for k,v in dic_words.items() if v>4000]
                     
   
-#Pre-Processing partie Train
-def ban_words(df, limit=10):
+def ban_words(df, limit_inf=10, limit_sup=np.inf):
+    
     french_stopwords = list(set(stopwords.words('french')))
     banned_words = []
 
@@ -102,6 +86,6 @@ def ban_words(df, limit=10):
                 else:
                     dic[word]=1
 
-    banned_words += [k for k,v in dic.items() if v<=limit]
+    banned_words += [k for k,v in dic.items() if (v<=limit_inf or v>limit_sup)]
     return banned_words
               
