@@ -111,3 +111,28 @@ def y_mat(df):
     for i, row in df.iterrows():
         y[i,:] = row['Genre(s)']
     return y
+
+
+models = [SVC(kernel='sigmoid',max_iter=100, random_state=0),
+          LogisticRegression(random_state=0, class_weight='balanced', max_iter=50, solver='liblinear', C=1),
+          RandomForestClassifier(random_state=0, n_estimators=200, max_depth=3, class_weight='balanced')]
+
+name_models = ['SVC', 'Logistic Regression', 'Random Forest']
+
+columns = list(dic_genres.keys())[:17] + ['Mean']
+
+def compare_models(models):
+    res = np.zeros((len(models), 18))
+    for j, clf in enumerate(models):
+      l_res = []
+      for i in range(17):
+        print(i, clf)
+        clf.fit(X_train, y_train[:,i])
+        y_pred = clf.predict(X_test)
+        l_res.append(F1_score(y_pred, y_test[:,i]))
+      l_res.append(np.mean(l_res))
+      res[j, :] = l_res
+    res = pd.DataFrame(res, columns=columns)
+    res['Model Name'] = name_models
+    res = res[['Model Name'] + columns]
+    return res
