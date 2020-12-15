@@ -3,6 +3,7 @@ L'objectif de ce projet est de tenter de répondre à la question suivante : peu
 
 ## Table des matières
   * Webscraping d'Allociné
+  * [A. Webscraping d'Allociné]
   * Visualisation et préprocessing
   * Modélisation
   
