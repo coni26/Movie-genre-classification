@@ -9,7 +9,10 @@ Notre modèle final étant une régression logistic multi_label
   * Modélisation
   
 ## I. Webscraping d'Allociné
-Nous avons récupérer les données sur [Allociné](http://allocine.fr). Le processus peut être assez long, c'est pourquoi nous proposons de tester les algorithmes sur un faible nombre de données. En réalité, nous avons scrapté plus de 20.000 films.
+Nous avons récupéré les données sur [Allociné](http://allocine.fr) et nous avons selectionné 20000 films ayant un synopsis de plus de 250 caractères, et appartenant à 17 genres différents.
 
 ## II. Visualisation et préprocessing
-A l'aide de différents graphes, nous expliquons notre stratégie de sélection des variables 
+
+
+
+## III. Modélisation
