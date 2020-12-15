@@ -111,9 +111,7 @@ def y_mat(df):
 models = [SVC(kernel='sigmoid',max_iter=100, random_state=0),
           LogisticRegression(random_state=0, class_weight='balanced', max_iter=50, solver='liblinear', C=1),
           RandomForestClassifier(random_state=0, n_estimators=200, max_depth=3, class_weight='balanced')]
-
 name_models = ['SVC', 'Logistic Regression', 'Random Forest']
-
 
 
 def compare_models(models):
@@ -132,3 +130,63 @@ def compare_models(models):
     res['Model Name'] = name_models
     res = res[['Model Name'] + columns]
     return res
+
+
+
+class LogisticRegression_MultiLabel:
+    
+    def __init__(self, max_iter, C1, C2, random_state, solver='liblinear'):
+        self.max_iter = max_iter
+        self.C1 = C1
+        self.C2 = C2
+        self.class_weight = 'balanced'
+        self.random_state = random_state
+        self.solver = solver
+        self.l_clf1 = None
+        self.l_clf2 = None
+        self.nb_genres = None
+        
+        
+    def fit(self, X, y):
+        nb_genres = y.shape[1]
+        self.nb_genres = nb_genres
+        buf = np.concatenate([X,y], axis=1)
+        
+        mat_pred = np.zeros((X.shape[0],nb_genres))
+        l_clf1 = []
+        for i in range(nb_genres):
+            clf1 = LogisticRegression(random_state=self.random_state, class_weight=self.class_weight, max_iter=self.max_iter, solver=self.solver, C=self.C1)
+            clf1.fit(X, y[:,i])
+            l_clf1.append(clf1)
+            prob = clf1.predict_proba(X)[:,1]
+            mat_pred[:,i] = prob
+        mat_pred = np.concatenate([mat_pred, X], axis=1)
+        self.l_clf1 = l_clf1
+        
+        l_clf2 = []
+        for i in range(nb_genres):
+            clf2 = LogisticRegression(random_state=self.random_state, class_weight=self.class_weight, max_iter=self.max_iter, solver=self.solver, C=self.C2)
+            clf2.fit(mat_pred, y[:,i])
+            l_clf2.append(clf2)
+        self.l_clf2 = l_clf2    
+        
+        
+    def predict(self, X):
+        res = np.zeros((X.shape[0], self.nb_genres))
+        mat_test = np.zeros((X.shape[0],self.nb_genres))
+        
+        for i in range(self.nb_genres):
+            clf1 = self.l_clf1[i]
+            prob = clf1.predict_proba(X)[:,1]
+            mat_test[:,i] = prob
+        mat_test = np.concatenate([mat_test, X], axis=1)
+        
+        for i in range(self.nb_genres):
+            clf2 = self.l_clf2[i]
+            pred = clf2.predict(mat_test)
+            res[:,i] = pred
+        
+        return res 
+        
+
+
