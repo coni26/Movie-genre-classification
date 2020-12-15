@@ -1,3 +1,7 @@
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+
 def compute_hash(word):
     '''
         Donne un identifiant numérique à chaque mot
