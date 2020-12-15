@@ -112,7 +112,7 @@ def reseau_genres(df, dic_genres):
 
 
 
-def words_genre(df, dic_genres):
+def words_genre(df, dic_genres, banned_words):
   l_dico = []
   for k in range (17):
       l_dico.append({})
@@ -124,7 +124,7 @@ def words_genre(df, dic_genres):
           if dic_genres[genre]<=16 : 
               lst.append(dic_genres[genre])
       for k, word in enumerate(l):
-          if not((len(word)<=2) or (word in french_stopwords) or (word in l[:k])):
+          if not((len(word)<=2) or (word in banned_words) or (word in l[:k])):
               for p in lst:
                   if word in l_dico[p]:
                       l_dico[p][word] += 1
