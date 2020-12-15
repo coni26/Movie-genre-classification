@@ -1,6 +1,15 @@
 import pandas as pd
 import numpy as np
 
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem.snowball import FrenchStemmer
+stemmer = FrenchStemmer()
+
+from ast import literal_eval
+
+
 dic_genres = {'Drame': 0,
               'Comédie': 1,
               'Thriller': 2,
