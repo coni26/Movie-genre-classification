@@ -1,12 +1,6 @@
 # Movie genre classification
 L'objectif de ce projet est de tenter de répondre à la question suivante : peut-on prédire le(s) genre(s) d'un film à partir de son synopsis ?
 
-## Table des matières
-  * Webscraping d'Allociné
-  * [A. Webscraping d'Allociné]
-  * Visualisation et préprocessing
-  * Modélisation
-  
 ## I. Webscraping d'Allociné
 Nous avons consitué une base de données grâce au site [Allociné](http://allocine.fr) en récupérant le titre, le synopsis et le(s) genre(s) de 22000 films. Nous avons aussi pris comme décision de ne sélectionner que les films ayant un synopsis assez long pour être étudié, c'est-à-dire d'un nombre de caractères supérieur à 250.
 
