@@ -9,7 +9,7 @@ Notre modèle final étant une régression logistic multi_label
   * Modélisation
   
 ## I. Webscraping d'Allociné
-Nous avons récupéré les données sur [Allociné](http://allocine.fr) et nous avons selectionné 20000 films ayant un synopsis de plus de 250 caractères, et appartenant à 17 genres différents.
+Nous avons récupéré les données sur [Allociné](http://allocine.fr) et nous avons selectionné 20000 films ayant un synopsis de plus de 250 caractères.
 
 ## II. Visualisation et préprocessing
 
