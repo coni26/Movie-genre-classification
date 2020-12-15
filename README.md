@@ -17,8 +17,11 @@ Nous avons consitué une base de données grâce au site [Allociné](http://allo
 ## III. Modélisation
 Notre tâche consistait à réaliser une classification multi-label. 
 Pour cela nous avons d'abord étudier différents algorithmes de classification binaire :
+
  * SVC
  * Random Forest
  * Logistic Regression
+ 
 Puis en observant que la régression logistique était la plus appropriée nous avons construit un algortihme de classification multi-label en empilant des Logistic Regression en Stacking Structure.
+
 Enfin nous comparons ce modèle à un réseau de neurones.
