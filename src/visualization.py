@@ -145,3 +145,26 @@ def world_cloud_mask(l_dico, num_genre, path):
     plt.title('Nuage de mots pour le genre '+'"'+genre[0]+'"', fontsize=20)
     plt.axis('off')
     plt.show()
+
+
+
+def draw_Zipf(df) : 
+  dic_words_zipf = {}
+  for i, row in df.iterrows():
+    for word in row['Synopsis']:
+        if len(word)>1:
+            if word in dic_words_zipf:
+                dic_words_zipf[word]+=1
+            else:
+                dic_words_zipf[word]=1
+                
+  l_occur = sorted(list((dic_words_zipf.values())), reverse=True)
+  lx = [i for i in range(len(l_occur))]
+  plt.figure(figsize=(12,8))
+  plt.xscale('log')
+  plt.yscale('log')
+  plt.plot(lx,l_occur,'r+')
+  plt.xlabel('Rang du mot')
+  plt.ylabel('Fréquence du mot')
+  plt.title('Loi de Zipf')
+  plt.show()
