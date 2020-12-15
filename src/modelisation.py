@@ -189,4 +189,30 @@ class LogisticRegression_MultiLabel:
         return res 
         
 
+#LogisticRegression_MultiLabel
+clf = LogisticRegression_MultiLabel(200,0.5,2,0)
+clf.fit(X_train, y_train)  
+pred_LR = clf.predict(X_test)
+res = []
+for i in range(17):
+  res.append(F1_score(pred_LR[:,i],y_test[:,i]))
+res.append(np.mean(res))
+columns = list(dic_genres.keys())[:17] + ['Mean']
+res = pd.DataFrame([res], columns=columns)
+res['Model Name'] = ['Logistic Regression Multi Label']
+res = res[['Model Name'] + columns]
+res
 
+#MLPClassifier
+clf = MLPClassifier(hidden_layer_sizes=(100), random_state=0, max_iter=150, learning_rate_init=0.01, alpha=0.01)
+clf.fit(X_train, y_train)
+pred_MLP = clf.predict(X_test)
+res = []
+for i in range(17):
+  res.append(F1_score(pred_MLP[:,i],y_test[:,i]))
+res.append(np.mean(res))
+columns = list(dic_genres.keys())[:17] + ['Mean']
+res3 = pd.DataFrame([res], columns=columns)
+res3['Model Name'] = ['MLP Classifier']
+res3 = res3[['Model Name'] + columns]
+res3
